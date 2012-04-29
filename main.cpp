@@ -27,7 +27,7 @@
 //======================================================
 // GLOBAL VARIABLES 
 //======================================================
-static double theta_stop1 = 90;
+static double theta_stop1 = 260;
 float pitch = 0.0f;
 float yaw = 0.0f;
 float pitch0, yaw0;
@@ -36,58 +36,198 @@ int mouseX0, mouseY0;
 bool rotating=false;
 
 //======================================================
-// CUBE ROUTINES
+// DRAW M
 //======================================================
-//Cube points and colours
-
-float vertices[][3] = 
-{
-		{-0.5,-2,-0.5},{0.5,-2,-0.5},
-		{0.5,2,-0.5}, {-0.5,2,-0.5}, {-0.5, -2,0.5}, 
-		{0.5,-2,0.5}, {0.5,2,0.5}, {-0.5,2,0.5}
-};
-
-float colors[][3] = {{0.0,0.5,0.5},{1.0,0.0,0.0},
-	{1.0,1.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0}, 
-	{1.0,0.0,1.0}, {1.0,1.0,1.0}, {0.0,1.0,1.0}};
-
-
-
-void polygon(int a, int b, int c , int d)
-{
-	// draw a polygon using colour of first vertex
-
- 	glBegin(GL_POLYGON);
-        glColor3fv(colors[a]);
-		glVertex3fv(vertices[a]);
-		glVertex3fv(vertices[b]);
-		glVertex3fv(vertices[c]);
-		glVertex3fv(vertices[d]);
+void drawRightBranch() {
+	glBegin(GL_POLYGON);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 2, 1);
+		glVertex3f(2, 1, 1);
+		glVertex3f(0, -2, 1);
+		glVertex3f(0, -1, 1);
 	glEnd();
 	
-        //	glEnable(GL_LINE_SMOOTH);
-	// glBegin(GL_LINE_LOOP);
-	// 	glColor3f(0,0,0);
-	// 	glVertex3fv(vertices[a]);
-	// 	glVertex3fv(vertices[b]);
-	// 	glVertex3fv(vertices[c]);
-	// 	glVertex3fv(vertices[d]);
-	// glEnd();
+	glBegin(GL_POLYGON);//top
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 2, -1);
+		glVertex3f(2, 2, 1);
+		glVertex3f(0, -1, 1);
+		glVertex3f(0, -1, -1);
+	glEnd();
+	
+	glBegin(GL_POLYGON);//back
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 2, -1);
+		glVertex3f(2, 1, -1);
+		glVertex3f(0, -2, -1);
+		glVertex3f(0, -1, -1);
+	glEnd();
+	
+	glBegin(GL_POLYGON);//bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 1, -1);
+		glVertex3f(2, 1, 1);
+		glVertex3f(0, -2, 1);
+		glVertex3f(0, -2, -1);
+	glEnd();
+	
 	glDisable(GL_LINE_SMOOTH);
 }
 
-void cube(void) {
-	//Draw unit cube centred on the origin
-	polygon(0,3,2,1);
-	polygon(2,3,7,6);
-	polygon(4,7,3,0);
-	polygon(1,2,6,5);
-	polygon(7,4,5,6);
-	polygon(5,4,0,1);
+void drawLeftBranch(){
+  glBegin(GL_POLYGON);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(-2, 1, 1);
+		glVertex3f(0, -2, 1);
+		glVertex3f(0, -1, 1);
+	glEnd();
+	
+	glBegin(GL_POLYGON);//top
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(0, -1, 1);
+		glVertex3f(0, -1, -1);
+	glEnd();
+	
+	glBegin(GL_POLYGON);//back
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-2, 1, -1);
+		glVertex3f(0, -2, -1);
+		glVertex3f(0, -1, -1);
+	glEnd();
+	
+	glBegin(GL_POLYGON);//bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 1, -1);
+		glVertex3f(-2, 1, 1);
+		glVertex3f(0, -2, 1);
+		glVertex3f(0, -2, -1);
+	glEnd();
+	
+	glDisable(GL_LINE_SMOOTH);
+}
+
+void drawLeftTrunk(){
+	glBegin(GL_QUADS);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(-3, 2, 1);
+		glVertex3f(-3, -2, 1);
+		glVertex3f(-2, -2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//top
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(-3, 2, 1);
+		glVertex3f(-3, 2, -1);
+		glVertex3f(-2, 2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//back
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-3, 2, -1);
+		glVertex3f(-3, -2, -1);
+		glVertex3f(-2, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, -2, 1);
+		glVertex3f(-3, -2, 1);
+		glVertex3f(-3, -2, -1);
+		glVertex3f(-2, -2, -1);
+	glEnd();
+	//~ 
+	glBegin(GL_QUADS);//left
+        glColor3f(0, 0, 0);
+		glVertex3f(-3, 2, -1);
+		glVertex3f(-3, -2, -1);
+		glVertex3f(-3, -2, 1);
+		glVertex3f(-3, 2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//right
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-2, -2, -1);
+		glVertex3f(-2, -2, 1);
+		glVertex3f(-2, 2, 1);
+	glEnd();
+	
+	glDisable(GL_LINE_SMOOTH);
+}
+
+void drawRightTrunk(){
+	glBegin(GL_QUADS);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 2, 1);
+		glVertex3f(3, 2, 1);
+		glVertex3f(3, -2, 1);
+		glVertex3f(2, -2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//top
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 2, 1);
+		glVertex3f(3, 2, 1);
+		glVertex3f(3, 2, -1);
+		glVertex3f(2, 2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//back
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 2, -1);
+		glVertex3f(3, 2, -1);
+		glVertex3f(3, -2, -1);
+		glVertex3f(2, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(2, -2, 1);
+		glVertex3f(3, -2, 1);
+		glVertex3f(3, -2, -1);
+		glVertex3f(2, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//right
+        glColor3f(0, 0, 0);
+		glVertex3f(3, 2, -1);
+		glVertex3f(3, -2, -1);
+		glVertex3f(3, -2, 1);
+		glVertex3f(3, 2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//left
+        glColor3f(0, 0, 0);
+		glVertex3f(2, 2, -1);
+		glVertex3f(2, -2, -1);
+		glVertex3f(2, -2, 1);
+		glVertex3f(2, 2, 1);
+	glEnd();
+	
+	glDisable(GL_LINE_SMOOTH);
+}
+
+void drawM(void) {
+	glPushMatrix();
+    glTranslatef(-2, 0, 0);
+     
+	drawRightTrunk();
+	drawLeftTrunk();
+	drawLeftBranch();
+	drawRightBranch();
+	
+	glPopMatrix();
 }
 
 //======================================================
-// DRAW 3D CURVE
+// DRAW C
 //======================================================
 void draw3Dcurve(double depth, double r1, double r2, double theta_start, double theta_stop, double theta_inc) {
 	// Function to draw 3D curve 
@@ -103,7 +243,7 @@ void draw3Dcurve(double depth, double r1, double r2, double theta_start, double 
 	z_front=depth/2; z_back=-depth/2;
 	
 	// draw rear face (away from viewer)
-	glColor3f(0.0, 0.1, 1.0);
+	glColor3f(0.0, 0.0, 0.0);
 	z=z_back;
 	glBegin(GL_QUAD_STRIP);
 	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc) {
@@ -113,7 +253,7 @@ void draw3Dcurve(double depth, double r1, double r2, double theta_start, double 
 	glEnd();
 
 	// draw front face (closer to viewer)
-	glColor3f(1.0, 0.2, 0.2);
+	glColor3f(0.0, 0.0, 0.0);
 	z=z_front;
 	glBegin(GL_QUAD_STRIP);
 	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc)	{
@@ -123,7 +263,7 @@ void draw3Dcurve(double depth, double r1, double r2, double theta_start, double 
 	glEnd();
 
 	// draw upper face
-	glColor3f(0.0, 0.0, 1.0);
+	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_QUAD_STRIP);
 	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc) {
 		x=cos(c*thet)*r2; y=sin(c*thet)*r2;
@@ -142,7 +282,7 @@ void draw3Dcurve(double depth, double r1, double r2, double theta_start, double 
 	glEnd();
 
 	// draw bottom end
-	glColor3f(0.0, 1.0, 1.0);
+	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
 		glVertex3d(r1,0.0,z_front);
 		glVertex3d(r1,0.0,z_back);
@@ -161,6 +301,21 @@ void draw3Dcurve(double depth, double r1, double r2, double theta_start, double 
 		glVertex3d(x1,y1,z_back);
 	glEnd();
 }
+
+void drawC(void) {
+	glPushMatrix();
+	glRotatef(50.0, 0.0, 0.0, 1.0);
+	
+	draw3Dcurve  (1.0,          //depth  
+				  1.5,          //inner radius
+				  2.0,          //outer radius
+				  0.0,        //start angle
+				  theta_stop1,  		//stop angle
+				  5.0);  
+				  
+	glPopMatrix();
+}
+
 
 //======================================================
 // DRAW AXES and GRIDS
@@ -286,17 +441,10 @@ void displayCallBack()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	executeViewControl (yaw, pitch);
-	drawAxesAndGridLines(true, true, true);
+	//drawAxesAndGridLines(true, true, true);
 
-	// //Draw curve using code in 3DCurve.cpp
-	// draw3Dcurve  (1.0,          //depth  
-	// 			  1.5,          //inner radius
-	// 			  2.0,          //outer radius
-	// 			  0.0,          //start angle
-	// 			  theta_stop1,  //stop angle
-	// 			  5.0);         //anular increments
-
-        cube();
+	//drawM();
+	drawC();
 
 	glutSwapBuffers();
 }
@@ -312,7 +460,7 @@ int main(int argc, char** argv)
 	// Create and name window
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); // Need both double buffering and z buffer
     glutInitWindowSize(500, 500);
-    glutCreateWindow("Example 8.1 - 3D Curve Example");
+    glutCreateWindow("F29GR - Initials - MCR");
 
 	// Add Display & Mouse CallBacks
 	glutReshapeFunc(reshapeCallBack);
