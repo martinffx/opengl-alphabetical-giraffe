@@ -25,15 +25,87 @@
 #include <stdio.h>
 
 //======================================================
-// GLOBAL VARIABLES 
+// GLOBAL VARIABLES & FUNCTIONS
 //======================================================
-static double theta_stop1 = 260;
 float pitch = 0.0f;
 float yaw = 0.0f;
 float pitch0, yaw0;
 bool MousePressed;
 int mouseX0, mouseY0;
 bool rotating=false;
+
+void draw3Dcurve(double depth, double r1, double r2, double theta_start, double theta_stop, double theta_inc) {
+	// Function to draw 3D curve 
+	// depth = depth centred round z=0
+	// r1 = inner radius
+	// r2 = outer radius
+	// theta_start = start angle in degrees measured from x-axis
+	// theta_stop = similar 
+
+	double x, y, x1, x2, y1, y2, z, thet, z_front, z_back;
+	int i=0;
+	double radius=1.5, c=3.14159/180.0;
+	z_front=depth/2; z_back=-depth/2;
+	
+	// draw rear face (away from viewer)
+	glColor3f(0.0, 0.0, 0.0);
+	z=z_back;
+	glBegin(GL_QUAD_STRIP);
+	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc) {
+		x=cos(c*thet)*r2; y=sin(c*thet)*r2; glVertex3d(x,y,z);
+		x=cos(c*thet)*r1; y=sin(c*thet)*r1; glVertex3d(x,y,z);
+	}
+	glEnd();
+
+	// draw front face (closer to viewer)
+	glColor3f(0.0, 0.0, 0.0);
+	z=z_front;
+	glBegin(GL_QUAD_STRIP);
+	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc)	{
+		x=cos(c*thet)*r1; y=sin(c*thet)*r1; glVertex3d(x,y,z);
+		x=cos(c*thet)*r2; y=sin(c*thet)*r2; glVertex3d(x,y,z);
+	}
+	glEnd();
+
+	// draw upper face
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_QUAD_STRIP);
+	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc) {
+		x=cos(c*thet)*r2; y=sin(c*thet)*r2;
+		z=z_front; glVertex3d(x,y,z);
+		z=z_back;  glVertex3d(x,y,z);
+	}
+	glEnd();
+
+	// draw lower face
+	glBegin(GL_QUAD_STRIP);
+	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc)	{
+		x=cos(c*thet)*r1; y=sin(c*thet)*r1;
+		z=z_back; glVertex3d(x,y,z);
+		z=z_front; glVertex3d(x,y,z);
+	}
+	glEnd();
+
+	// draw bottom end
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+		glVertex3d(r1,0.0,z_front);
+		glVertex3d(r1,0.0,z_back);
+		glVertex3d(r2,0.0,z_back);
+		glVertex3d(r2,0.0,z_front);
+	glEnd();
+
+	// draw top end
+	glBegin(GL_POLYGON);
+		x1=cos(c*theta_stop)*r1; y1=sin(c*theta_stop)*r1;
+		x2=cos(c*theta_stop)*r2; y2=sin(c*theta_stop)*r2;
+
+		glVertex3d(x1,y1,z_front);
+		glVertex3d(x2,y2,z_front);
+		glVertex3d(x2,y2,z_back);
+		glVertex3d(x1,y1,z_back);
+	glEnd();
+}
 
 //======================================================
 // DRAW M
@@ -229,79 +301,6 @@ void drawM(void) {
 //======================================================
 // DRAW C
 //======================================================
-void draw3Dcurve(double depth, double r1, double r2, double theta_start, double theta_stop, double theta_inc) {
-	// Function to draw 3D curve 
-	// depth = depth centred round z=0
-	// r1 = inner radius
-	// r2 = outer radius
-	// theta_start = start angle in degrees measured from x-axis
-	// theta_stop = similar 
-
-	double x, y, x1, x2, y1, y2, z, thet, z_front, z_back;
-	int i=0;
-	double radius=1.5, c=3.14159/180.0;
-	z_front=depth/2; z_back=-depth/2;
-	
-	// draw rear face (away from viewer)
-	glColor3f(0.0, 0.0, 0.0);
-	z=z_back;
-	glBegin(GL_QUAD_STRIP);
-	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc) {
-		x=cos(c*thet)*r2; y=sin(c*thet)*r2; glVertex3d(x,y,z);
-		x=cos(c*thet)*r1; y=sin(c*thet)*r1; glVertex3d(x,y,z);
-	}
-	glEnd();
-
-	// draw front face (closer to viewer)
-	glColor3f(0.0, 0.0, 0.0);
-	z=z_front;
-	glBegin(GL_QUAD_STRIP);
-	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc)	{
-		x=cos(c*thet)*r1; y=sin(c*thet)*r1; glVertex3d(x,y,z);
-		x=cos(c*thet)*r2; y=sin(c*thet)*r2; glVertex3d(x,y,z);
-	}
-	glEnd();
-
-	// draw upper face
-	glColor3f(0.0, 0.0, 0.0);
-	glBegin(GL_QUAD_STRIP);
-	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc) {
-		x=cos(c*thet)*r2; y=sin(c*thet)*r2;
-		z=z_front; glVertex3d(x,y,z);
-		z=z_back;  glVertex3d(x,y,z);
-	}
-	glEnd();
-
-	// draw lower face
-	glBegin(GL_QUAD_STRIP);
-	for(thet=theta_start; thet<=theta_stop;thet+=theta_inc)	{
-		x=cos(c*thet)*r1; y=sin(c*thet)*r1;
-		z=z_back; glVertex3d(x,y,z);
-		z=z_front; glVertex3d(x,y,z);
-	}
-	glEnd();
-
-	// draw bottom end
-	glColor3f(0.0, 0.0, 0.0);
-	glBegin(GL_POLYGON);
-		glVertex3d(r1,0.0,z_front);
-		glVertex3d(r1,0.0,z_back);
-		glVertex3d(r2,0.0,z_back);
-		glVertex3d(r2,0.0,z_front);
-	glEnd();
-
-	// draw top end
-	glBegin(GL_POLYGON);
-		x1=cos(c*theta_stop)*r1; y1=sin(c*theta_stop)*r1;
-		x2=cos(c*theta_stop)*r2; y2=sin(c*theta_stop)*r2;
-
-		glVertex3d(x1,y1,z_front);
-		glVertex3d(x2,y2,z_front);
-		glVertex3d(x2,y2,z_back);
-		glVertex3d(x1,y1,z_back);
-	glEnd();
-}
-
 void drawC(void) {
 	glPushMatrix();
 	glRotatef(50.0, 0.0, 0.0, 1.0);
@@ -309,13 +308,199 @@ void drawC(void) {
 	draw3Dcurve  (1.0,          //depth  
 				  1.5,          //inner radius
 				  2.0,          //outer radius
-				  0.0,        //start angle
-				  theta_stop1,  		//stop angle
+				  0.0,          //start angle
+				  260,  		//stop angle
 				  5.0);  
 				  
 	glPopMatrix();
 }
 
+//======================================================
+// DRAW R
+//======================================================
+void drawStem() {
+	glBegin(GL_QUADS);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(-3, 2, 1);
+		glVertex3f(-3, -2, 1);
+		glVertex3f(-2, -2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//top
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(-3, 2, 1);
+		glVertex3f(-3, 2, -1);
+		glVertex3f(-2, 2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//back
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-3, 2, -1);
+		glVertex3f(-3, -2, -1);
+		glVertex3f(-2, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, -2, 1);
+		glVertex3f(-3, -2, 1);
+		glVertex3f(-3, -2, -1);
+		glVertex3f(-2, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//left
+        glColor3f(0, 0, 0);
+		glVertex3f(-3, 2, -1);
+		glVertex3f(-3, -2, -1);
+		glVertex3f(-3, -2, 1);
+		glVertex3f(-3, 2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//right
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-2, -2, -1);
+		glVertex3f(-2, -2, 1);
+		glVertex3f(-2, 2, 1);
+	glEnd();
+	
+	glDisable(GL_LINE_SMOOTH);
+}
+
+void drawLeg() {
+	glBegin(GL_QUADS);//Back
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 0, -1);
+		glVertex3f(-1, 0, -1);
+		glVertex3f(0, -2, -1);
+		glVertex3f(-1, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 0, 1);
+		glVertex3f(-1, 0, 1);
+		glVertex3f(0, -2, 1);
+		glVertex3f(-1, -2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Back
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 0, -1);
+		glVertex3f(-2, 0, 1);
+		glVertex3f(-1, -2, 1);
+		glVertex3f(-1, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(-1, 0, -1);
+		glVertex3f(-1, 0, 1);
+		glVertex3f(0, -2, 1);
+		glVertex3f(0, -2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(-1, -2, 1);
+		glVertex3f(-1, -2, -1);
+		glVertex3f(0, -2, -1);
+		glVertex3f(0, -2, 1);
+	glEnd();
+}
+
+void drawTopLeg() {
+	glBegin(GL_QUADS);//Top
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-1, 2, -1);
+		glVertex3f(-1, 2, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Back
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, -1);
+		glVertex3f(-2, 1.5, -1);
+		glVertex3f(-1, 1.5, -1);
+		glVertex3f(-1, 2, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 1.5, -1);
+		glVertex3f(-2, 1.5, 1);
+		glVertex3f(-1, 1.5, 1);
+		glVertex3f(-1, 1.5, -1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 2, 1);
+		glVertex3f(-2, 1.5, 1);
+		glVertex3f(-1, 1.5, 1);
+		glVertex3f(-1, 2, 1);
+	glEnd();
+}
+
+void drawBottomLeg() {
+	glBegin(GL_QUADS);//Bottom
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 0, -1);
+		glVertex3f(-1, 0, -1);
+		glVertex3f(-1, 0, 1);
+		glVertex3f(-2, 0, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Front
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 0, 1);
+		glVertex3f(-2, 0.5, 1);
+		glVertex3f(-1, 0.5, 1);
+		glVertex3f(-1, 0, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Top
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 0.5, 1);
+		glVertex3f(-2, 0.5, -1);
+		glVertex3f(-1, 0.5, -1);
+		glVertex3f(-1, 0.5, 1);
+	glEnd();
+	
+	glBegin(GL_QUADS);//Back
+        glColor3f(0, 0, 0);
+		glVertex3f(-2, 0.5, -1);
+		glVertex3f(-2, 0, -1);
+		glVertex3f(-1, 0, -1);;
+		glVertex3f(-1, 0.5, -1);
+	glEnd();
+}
+
+void drawCurve() {
+	drawTopLeg();
+	drawBottomLeg();
+	
+	glPushMatrix();
+	glTranslatef(-1, 1, 0);
+	glRotatef(270.0, 0.0, 0.0, 1.0);
+	draw3Dcurve  (2.0,          //depth  
+				  0.5,          //inner radius
+				  1.0,          //outer radius
+				  0.0,          //start angle
+				  180,  		//stop angle
+				  5.0);  
+	glPopMatrix();
+}
+
+void drawR(void) {
+	drawStem();
+	drawLeg();
+	drawCurve();
+}
 
 //======================================================
 // DRAW AXES and GRIDS
@@ -444,7 +629,8 @@ void displayCallBack()
 	//drawAxesAndGridLines(true, true, true);
 
 	//drawM();
-	drawC();
+	//drawC();
+	drawR();
 
 	glutSwapBuffers();
 }
