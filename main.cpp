@@ -24,6 +24,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "3DCurve.h"
+#include "mcr.h"
 
 //======================================================
 // GLOBAL VARIABLES & FUNCTIONS
@@ -34,396 +35,6 @@ float pitch0, yaw0;
 bool MousePressed;
 int mouseX0, mouseY0;
 bool rotating=false;
-
-//======================================================
-// DRAW M
-//======================================================
-void drawRightBranch() {
-	glBegin(GL_POLYGON);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 2, 1);
-		glVertex3f(2, 1, 1);
-		glVertex3f(0, -2, 1);
-		glVertex3f(0, -1, 1);
-	glEnd();
-	
-	glBegin(GL_POLYGON);//top
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 2, -1);
-		glVertex3f(2, 2, 1);
-		glVertex3f(0, -1, 1);
-		glVertex3f(0, -1, -1);
-	glEnd();
-	
-	glBegin(GL_POLYGON);//back
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 2, -1);
-		glVertex3f(2, 1, -1);
-		glVertex3f(0, -2, -1);
-		glVertex3f(0, -1, -1);
-	glEnd();
-	
-	glBegin(GL_POLYGON);//bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 1, -1);
-		glVertex3f(2, 1, 1);
-		glVertex3f(0, -2, 1);
-		glVertex3f(0, -2, -1);
-	glEnd();
-	
-	glDisable(GL_LINE_SMOOTH);
-}
-
-void drawLeftBranch(){
-  glBegin(GL_POLYGON);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(-2, 1, 1);
-		glVertex3f(0, -2, 1);
-		glVertex3f(0, -1, 1);
-	glEnd();
-	
-	glBegin(GL_POLYGON);//top
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(0, -1, 1);
-		glVertex3f(0, -1, -1);
-	glEnd();
-	
-	glBegin(GL_POLYGON);//back
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-2, 1, -1);
-		glVertex3f(0, -2, -1);
-		glVertex3f(0, -1, -1);
-	glEnd();
-	
-	glBegin(GL_POLYGON);//bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 1, -1);
-		glVertex3f(-2, 1, 1);
-		glVertex3f(0, -2, 1);
-		glVertex3f(0, -2, -1);
-	glEnd();
-	
-	glDisable(GL_LINE_SMOOTH);
-}
-
-void drawLeftTrunk(){
-	glBegin(GL_QUADS);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(-3, 2, 1);
-		glVertex3f(-3, -2, 1);
-		glVertex3f(-2, -2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//top
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(-3, 2, 1);
-		glVertex3f(-3, 2, -1);
-		glVertex3f(-2, 2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//back
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-3, 2, -1);
-		glVertex3f(-3, -2, -1);
-		glVertex3f(-2, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, -2, 1);
-		glVertex3f(-3, -2, 1);
-		glVertex3f(-3, -2, -1);
-		glVertex3f(-2, -2, -1);
-	glEnd();
-	//~ 
-	glBegin(GL_QUADS);//left
-        glColor3f(0, 0, 0);
-		glVertex3f(-3, 2, -1);
-		glVertex3f(-3, -2, -1);
-		glVertex3f(-3, -2, 1);
-		glVertex3f(-3, 2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//right
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-2, -2, -1);
-		glVertex3f(-2, -2, 1);
-		glVertex3f(-2, 2, 1);
-	glEnd();
-	
-	glDisable(GL_LINE_SMOOTH);
-}
-
-void drawRightTrunk(){
-	glBegin(GL_QUADS);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 2, 1);
-		glVertex3f(3, 2, 1);
-		glVertex3f(3, -2, 1);
-		glVertex3f(2, -2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//top
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 2, 1);
-		glVertex3f(3, 2, 1);
-		glVertex3f(3, 2, -1);
-		glVertex3f(2, 2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//back
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 2, -1);
-		glVertex3f(3, 2, -1);
-		glVertex3f(3, -2, -1);
-		glVertex3f(2, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(2, -2, 1);
-		glVertex3f(3, -2, 1);
-		glVertex3f(3, -2, -1);
-		glVertex3f(2, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//right
-        glColor3f(0, 0, 0);
-		glVertex3f(3, 2, -1);
-		glVertex3f(3, -2, -1);
-		glVertex3f(3, -2, 1);
-		glVertex3f(3, 2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//left
-        glColor3f(0, 0, 0);
-		glVertex3f(2, 2, -1);
-		glVertex3f(2, -2, -1);
-		glVertex3f(2, -2, 1);
-		glVertex3f(2, 2, 1);
-	glEnd();
-	
-	glDisable(GL_LINE_SMOOTH);
-}
-
-void drawM(void) {
-	drawRightTrunk();
-	drawLeftTrunk();
-	drawLeftBranch();
-	drawRightBranch();
-}
-
-//======================================================
-// DRAW C
-//======================================================
-void drawC(void) {
-	glPushMatrix();
-	glRotatef(50.0, 0.0, 0.0, 1.0);
-	
-	draw3Dcurve  (1.0,          //depth  
-				  1.5,          //inner radius
-				  2.0,          //outer radius
-				  0.0,          //start angle
-				  260,  		//stop angle
-				  5.0);  
-				  
-	glPopMatrix();
-}
-
-//======================================================
-// DRAW R
-//======================================================
-void drawStem() {
-	glBegin(GL_QUADS);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(-3, 2, 1);
-		glVertex3f(-3, -2, 1);
-		glVertex3f(-2, -2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//top
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(-3, 2, 1);
-		glVertex3f(-3, 2, -1);
-		glVertex3f(-2, 2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//back
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-3, 2, -1);
-		glVertex3f(-3, -2, -1);
-		glVertex3f(-2, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, -2, 1);
-		glVertex3f(-3, -2, 1);
-		glVertex3f(-3, -2, -1);
-		glVertex3f(-2, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//left
-        glColor3f(0, 0, 0);
-		glVertex3f(-3, 2, -1);
-		glVertex3f(-3, -2, -1);
-		glVertex3f(-3, -2, 1);
-		glVertex3f(-3, 2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//right
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-2, -2, -1);
-		glVertex3f(-2, -2, 1);
-		glVertex3f(-2, 2, 1);
-	glEnd();
-	
-	glDisable(GL_LINE_SMOOTH);
-}
-
-void drawLeg() {
-	glBegin(GL_QUADS);//Back
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 0, -1);
-		glVertex3f(-1, 0, -1);
-		glVertex3f(0, -2, -1);
-		glVertex3f(-1, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 0, 1);
-		glVertex3f(-1, 0, 1);
-		glVertex3f(0, -2, 1);
-		glVertex3f(-1, -2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Back
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 0, -1);
-		glVertex3f(-2, 0, 1);
-		glVertex3f(-1, -2, 1);
-		glVertex3f(-1, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(-1, 0, -1);
-		glVertex3f(-1, 0, 1);
-		glVertex3f(0, -2, 1);
-		glVertex3f(0, -2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(-1, -2, 1);
-		glVertex3f(-1, -2, -1);
-		glVertex3f(0, -2, -1);
-		glVertex3f(0, -2, 1);
-	glEnd();
-}
-
-void drawTopLeg() {
-	glBegin(GL_QUADS);//Top
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-1, 2, -1);
-		glVertex3f(-1, 2, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Back
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, -1);
-		glVertex3f(-2, 1.5, -1);
-		glVertex3f(-1, 1.5, -1);
-		glVertex3f(-1, 2, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 1.5, -1);
-		glVertex3f(-2, 1.5, 1);
-		glVertex3f(-1, 1.5, 1);
-		glVertex3f(-1, 1.5, -1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 2, 1);
-		glVertex3f(-2, 1.5, 1);
-		glVertex3f(-1, 1.5, 1);
-		glVertex3f(-1, 2, 1);
-	glEnd();
-}
-
-void drawBottomLeg() {
-	glBegin(GL_QUADS);//Bottom
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 0, -1);
-		glVertex3f(-1, 0, -1);
-		glVertex3f(-1, 0, 1);
-		glVertex3f(-2, 0, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Front
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 0, 1);
-		glVertex3f(-2, 0.5, 1);
-		glVertex3f(-1, 0.5, 1);
-		glVertex3f(-1, 0, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Top
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 0.5, 1);
-		glVertex3f(-2, 0.5, -1);
-		glVertex3f(-1, 0.5, -1);
-		glVertex3f(-1, 0.5, 1);
-	glEnd();
-	
-	glBegin(GL_QUADS);//Back
-        glColor3f(0, 0, 0);
-		glVertex3f(-2, 0.5, -1);
-		glVertex3f(-2, 0, -1);
-		glVertex3f(-1, 0, -1);;
-		glVertex3f(-1, 0.5, -1);
-	glEnd();
-}
-
-void drawCurve() {
-	drawTopLeg();
-	drawBottomLeg();
-	
-	glPushMatrix();
-	glTranslatef(-1, 1, 0);
-	glRotatef(270.0, 0.0, 0.0, 1.0);
-	draw3Dcurve  (2.0,          //depth  
-				  0.5,          //inner radius
-				  1.0,          //outer radius
-				  0.0,          //start angle
-				  180,  		//stop angle
-				  5.0);  
-	glPopMatrix();
-}
-
-void drawR(void) {
-	drawStem();
-	drawLeg();
-	drawCurve();
-}
 
 //======================================================
 // DRAW AXES and GRIDS
@@ -531,14 +142,46 @@ void mouseMotionCallBack(int x, int y)
 
 void reshapeCallBack(int w, int h) 
 {
+	float zoomFactor = 5.0;
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 	if (w == 0 || h == 0) return;
-    if (w <= h) glOrtho(-3.0, 3.0, -3.0 * (GLfloat) h / (GLfloat) w, 3.0 * (GLfloat) h / (GLfloat) w, -10.0, 10.0);
-    else        glOrtho(-3.0 * (GLfloat) w / (GLfloat) h, 3.0 * (GLfloat) w / (GLfloat) h, -3.0, 3.0, -10.0, 10.0);
+    if (w <= h) glOrtho(-zoomFactor, zoomFactor, -zoomFactor * (GLfloat) h / (GLfloat) w, zoomFactor * (GLfloat) h / (GLfloat) w, -20.0, 20.0);
+    else        glOrtho(-zoomFactor* (GLfloat) w / (GLfloat) h, zoomFactor * (GLfloat) w / (GLfloat) h, -zoomFactor, zoomFactor, -20.0, 20.0);
     glMatrixMode(GL_MODELVIEW);
 }
+
+//======================================================
+// KEYBOARD CALLBACK ROUTINE 
+//======================================================
+void keyboardCallBack(unsigned char key, int x, int y) {
+	printf("Keyboard call back: key=%c, x=%d, y=%d\n", key, x, y);
+	switch(key)
+	{
+	case 'b': case 'B':
+		glPolygonMode(GL_BACK,GL_FILL);
+	break;
+	case 'f': case 'F':
+		glPolygonMode(GL_FRONT,GL_FILL);
+	break;
+	case 'l': case 'L':
+		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+	break;
+	case 'r': 
+		rotating= !rotating;
+		rotateView(rotating);
+	break;
+	case 'R':
+        resetView();
+	break;
+	default:
+		printf("Press b - back fill; f - front fill; l - line; i - increment; or d - decrement; r - rotate; R - reset view\n");
+	}
+
+	glutPostRedisplay();
+}
+
 
 
 //======================================================
@@ -549,6 +192,7 @@ void displayCallBack()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	executeViewControl (yaw, pitch);
+	//glTranslatef(0.0, 0.0, -10);
 	//drawAxesAndGridLines(true, true, true);
 	
 	glPushMatrix();
@@ -565,6 +209,10 @@ void displayCallBack()
     glTranslatef(5, 0, 0);
 	drawR();
 	glPopMatrix();
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, 20.0);
 
 	glutSwapBuffers();
 }
@@ -587,7 +235,8 @@ int main(int argc, char** argv)
 	glutDisplayFunc(displayCallBack);
 	glutIdleFunc(NULL); // Starts the Idle Function as having no routine attached to it. This is modified in rotateView()
 	glutMouseFunc(mouseClickCallBack);
-        glutMotionFunc(mouseMotionCallBack);
+	glutMotionFunc(mouseMotionCallBack);
+	glutKeyboardFunc(keyboardCallBack);
 
 
 	glClearColor(1.0, 1.0, 1.0, 1.0);
