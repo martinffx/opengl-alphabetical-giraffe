@@ -180,6 +180,35 @@ void keyboardCallBack(unsigned char key, int x, int y) {
 }
 
 //======================================================
+// DRAW  ANIMAL
+//======================================================
+
+void drawFoot() {
+	//draw foot
+	glPushMatrix();
+	glRotatef(-90, 0, 0, 1);
+	glScalef(.55, 0.55, 1);
+	drawR();
+	glPopMatrix();
+}
+
+void drawAnimalLeg() {
+	//draw legs
+	glPushMatrix();
+	glRotatef(180, 1.0, 0.0, 0);
+	glScalef(0.5, 0.5, 2);
+	drawT();
+	glPopMatrix();
+	
+	//draw feet
+	glPushMatrix();
+	glTranslatef(-.1, -3.8, 0);
+	drawFoot();
+	glPopMatrix();
+}
+
+
+//======================================================
 // DISPLAY CALL BACK ROUTINE 
 //======================================================
 void displayCallBack()	
@@ -187,6 +216,18 @@ void displayCallBack()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	executeViewControl (yaw, pitch);
+	
+	drawM();//draw body
+	
+	glPushMatrix();//draw left leg
+	glTranslatef(-2.5, -2.5, 0);
+	drawAnimalLeg();
+	glPopMatrix();
+	
+	glPushMatrix();//draw right leg
+	glTranslatef(2.5, -2.5, 0);
+	drawAnimalLeg();
+	glPopMatrix();
 	//glTranslatef(0.0, 0.0, -10);
 	//drawAxesAndGridLines(true, true, true);
 	
@@ -209,7 +250,7 @@ void displayCallBack()
 	//~ glLoadIdentity();
 	//~ glTranslatef(0.0, 0.0, 20.0);
 	
-	drawS();
+	//drawS();
 
 	glutSwapBuffers();
 }
