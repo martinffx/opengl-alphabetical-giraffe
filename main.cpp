@@ -23,6 +23,7 @@
 float pitch = 0.0f;
 float yaw = 0.0f;
 float neckAngle = 75.0;
+float headAngle = -110.0;
 float zoomFactor = 10.0;
 float pitch0, yaw0;
 bool MousePressed;
@@ -183,6 +184,32 @@ void keyboardCallBack(unsigned char key, int x, int y) {
 //======================================================
 // DRAW  ANIMAL
 //======================================================
+void drawHorns(){
+	glPushMatrix();
+	glTranslatef(5,11.2,-.5);
+	glRotatef(20, 0, 0, 1);
+	glScalef(.2, 0.2, .2);
+	drawU();
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(5,11.2,.5);
+	glRotatef(20, 0, 0, 1);
+	glScalef(.2, 0.2, .2);
+	drawU();
+	glPopMatrix();
+}
+
+void drawHead() {
+	glPushMatrix();
+	glTranslatef(5.1,10.5,0);
+	glRotatef(headAngle, 0, 0, 1);
+	glScalef(.7, 0.7, 2);
+	drawS();
+	glPopMatrix();
+	
+	drawHorns();
+}
 
 void drawFoot() {
 	//draw foot
@@ -278,6 +305,7 @@ void drawGiraffe(){
 	drawRightLeg();
 	drawLeftLeg();
 	drawNeck();
+	drawHead();
 	glPopMatrix();
 }
 
