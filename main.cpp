@@ -22,7 +22,8 @@
 //======================================================
 float pitch = 0.0f;
 float yaw = 0.0f;
-float zoomFactor = 7.0;
+float neckAngle = 75.0;
+float zoomFactor = 10.0;
 float pitch0, yaw0;
 bool MousePressed;
 int mouseX0, mouseY0;
@@ -207,6 +208,78 @@ void drawAnimalLeg() {
 	glPopMatrix();
 }
 
+void drawLineOfC() {
+	glPushMatrix();
+	glScalef(.5,.5,1);
+	drawC();
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(1.3,0,0);
+	glScalef(.5,.5,1);
+	drawC();
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(2.6,0,0);
+	glScalef(.5,.5,1);
+	drawC();
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(3.9,0,0);
+	glScalef(.5,.5,1);
+	drawC();
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(5.2,0,0);
+	glScalef(.5,.5,1);
+	drawC();
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(6.5,0,0);
+	glScalef(.5,.5,1);
+	drawC();
+	glPopMatrix();
+}
+
+void drawNeck() {
+	glPushMatrix();
+	glTranslatef(3.5, 2.7, 0);
+	glRotatef(neckAngle, 0, 0, 1.0);
+	drawLineOfC();
+	glPopMatrix();
+}
+
+void drawLeftLeg(){
+	glPushMatrix();//draw left leg
+	glTranslatef(-2.5, -2.5, 0);
+	drawAnimalLeg();
+	glPopMatrix();
+}
+
+void drawRightLeg(){
+	glPushMatrix();//draw right leg
+	glTranslatef(2.5, -2.5, 0);
+	drawAnimalLeg();
+	glPopMatrix();
+}
+
+void drawBody(){
+	drawM();//draw body
+}
+
+void drawGiraffe(){
+	glPushMatrix();
+	glTranslatef(-4, -3, 0);
+	drawBody();
+	drawRightLeg();
+	drawLeftLeg();
+	drawNeck();
+	glPopMatrix();
+}
 
 //======================================================
 // DISPLAY CALL BACK ROUTINE 
@@ -217,40 +290,7 @@ void displayCallBack()
 	glLoadIdentity();
 	executeViewControl (yaw, pitch);
 	
-	drawM();//draw body
-	
-	glPushMatrix();//draw left leg
-	glTranslatef(-2.5, -2.5, 0);
-	drawAnimalLeg();
-	glPopMatrix();
-	
-	glPushMatrix();//draw right leg
-	glTranslatef(2.5, -2.5, 0);
-	drawAnimalLeg();
-	glPopMatrix();
-	//glTranslatef(0.0, 0.0, -10);
-	//drawAxesAndGridLines(true, true, true);
-	
-	//~ glPushMatrix();
-    //~ glTranslatef(-4.0, 0, 0);
-	//~ drawM();
-	//~ glPopMatrix();
-	//~ 
-	//~ glPushMatrix();
-    //~ glTranslatef(1.5, 0, 0);
-	//~ drawC();
-	//~ glPopMatrix();
-	//~ 
-	//~ glPushMatrix();
-    //~ glTranslatef(6.5, 0, 0);
-	//~ drawR();
-	//~ glPopMatrix();
-	//~ 
-	//~ glMatrixMode(GL_MODELVIEW);
-	//~ glLoadIdentity();
-	//~ glTranslatef(0.0, 0.0, 20.0);
-	
-	//drawS();
+	drawGiraffe();
 
 	glutSwapBuffers();
 }
@@ -265,7 +305,7 @@ int main(int argc, char** argv)
 
 	// Create and name window
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); // Need both double buffering and z buffer
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(700, 700);
     glutCreateWindow("F29GR - Initials - MCR");
 
 	// Add Display & Mouse CallBacks
