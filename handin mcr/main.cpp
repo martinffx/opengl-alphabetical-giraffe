@@ -1,13 +1,23 @@
-////////////////////////////////////////////////////////////////
-//
-// main.cpp - main program for animal made from initials
-// 
-// Author: Martin C. Richards
-// Student number : H00112763
-// Campus : Cape Town South Africa
-// Date:   29/04/2012
-//
-////////////////////////////////////////////////////////////////     
+//      main.cpp
+//      
+//      Copyright 2012 martin <martin@crunchbang>
+//      
+//      This program is free software; you can redistribute it and/or modify
+//      it under the terms of the GNU General Public License as published by
+//      the Free Software Foundation; either version 2 of the License, or
+//      (at your option) any later version.
+//      
+//      This program is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU General Public License for more details.
+//      
+//      You should have received a copy of the GNU General Public License
+//      along with this program; if not, write to the Free Software
+//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+//      MA 02110-1301, USA.
+//      
+//      
 
 #include <stdlib.h>
 #include <GL/glut.h>
@@ -15,14 +25,12 @@
 #include <stdio.h>
 #include "3DCurve.h"
 #include "mcr.h"
-#include "stu.h"
 
 //======================================================
 // GLOBAL VARIABLES & FUNCTIONS
 //======================================================
 float pitch = 0.0f;
 float yaw = 0.0f;
-float zoomFactor = 7.0;
 float pitch0, yaw0;
 bool MousePressed;
 int mouseX0, mouseY0;
@@ -134,6 +142,7 @@ void mouseMotionCallBack(int x, int y)
 
 void reshapeCallBack(int w, int h) 
 {
+	float zoomFactor = 5.0;
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -166,18 +175,14 @@ void keyboardCallBack(unsigned char key, int x, int y) {
 	case 'R':
         resetView();
 	break;
-	case 'z': 
-		if (zoomFactor > 1) zoomFactor = zoomFactor - 1;
-	break;
-	case 'Z':
-        zoomFactor = zoomFactor + 1;
-	break;
 	default:
 		printf("Press b - back fill; f - front fill; l - line; i - increment; or d - decrement; r - rotate; R - reset view\n");
 	}
 
 	glutPostRedisplay();
 }
+
+
 
 //======================================================
 // DISPLAY CALL BACK ROUTINE 
@@ -190,26 +195,24 @@ void displayCallBack()
 	//glTranslatef(0.0, 0.0, -10);
 	//drawAxesAndGridLines(true, true, true);
 	
-	//~ glPushMatrix();
-    //~ glTranslatef(-4.0, 0, 0);
-	//~ drawM();
-	//~ glPopMatrix();
-	//~ 
-	//~ glPushMatrix();
-    //~ glTranslatef(1.5, 0, 0);
-	//~ drawC();
-	//~ glPopMatrix();
-	//~ 
-	//~ glPushMatrix();
-    //~ glTranslatef(6.5, 0, 0);
-	//~ drawR();
-	//~ glPopMatrix();
-	//~ 
-	//~ glMatrixMode(GL_MODELVIEW);
-	//~ glLoadIdentity();
-	//~ glTranslatef(0.0, 0.0, 20.0);
+	glPushMatrix();
+    glTranslatef(-5.5, 0, 0);
+	drawM();
+	glPopMatrix();
 	
-	drawS();
+	glPushMatrix();
+    glTranslatef(0, 0, 0);
+	drawC();
+	glPopMatrix();
+	
+	glPushMatrix();
+    glTranslatef(5, 0, 0);
+	drawR();
+	glPopMatrix();
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, 20.0);
 
 	glutSwapBuffers();
 }
