@@ -22,13 +22,16 @@
 //======================================================
 float pitch = 0.0f;
 float yaw = 0.0f;
-float neckAngle = 75.0;
-float headAngle = -110.0;
+float neckAngle = 70.0;
+float headAngle = -80.0;
+bool increaseNeckAngle = true;
+bool increaseHeadAngle = true;
 float zoomFactor = 10.0;
 float pitch0, yaw0;
 bool MousePressed;
 int mouseX0, mouseY0;
 bool rotating=false;
+bool moving=false;
 
 //======================================================
 // DRAW AXES and GRIDS
@@ -87,20 +90,64 @@ void drawAxesAndGridLines(bool x_y_display, bool y_z_display,  bool x_z_display)
 //======================================================
 // VIEW CONTROL ROUTINES
 //======================================================
+void moveNeck(){
+	
+	float max = 80;
+	float min = 50;
+	
+	if (neckAngle == max) increaseNeckAngle = false;
+	if(neckAngle == min) increaseNeckAngle = true;
+	
+	if(increaseNeckAngle){
+		neckAngle = neckAngle + .5;
+	}else{
+		neckAngle = neckAngle - .5;
+	}
+}
+
+void moveHead(){
+	float max = -55;
+	float min = -90;
+	if (headAngle == max) increaseHeadAngle = false;
+	if(headAngle == min) increaseHeadAngle = true;
+	
+	if(increaseHeadAngle){
+		headAngle = headAngle + .5;
+	}else{
+		headAngle = headAngle - .5;
+	}
+}
+
+void incrementYaw(){
+	yaw=yaw+.25;
+}
 
 void idleCallBack (){
-	yaw=yaw+.25;
+	if(rotating) incrementYaw();
+	
+	if(moving) {
+		moveHead();
+		moveNeck();
+	}
+	
     glutPostRedisplay();
 }
 
 void rotateView(bool r){
 	rotating = r;
-	if (r) glutIdleFunc(idleCallBack); else glutIdleFunc(NULL);
+	if (moving | rotating) glutIdleFunc(idleCallBack); else glutIdleFunc(NULL);
 }
 
 void resetView(){
 	rotateView(false); //Stop view rotation
 	yaw=pitch=0;
+	neckAngle = 75.0;
+	headAngle = -100.0;
+}
+
+void moveView(bool m) {
+	moving = m;
+	if (moving | rotating) glutIdleFunc(idleCallBack); else glutIdleFunc(NULL);
 }
 
 void executeViewControl (float y, float p){
@@ -152,21 +199,16 @@ void keyboardCallBack(unsigned char key, int x, int y) {
 	printf("Keyboard call back: key=%c, x=%d, y=%d\n", key, x, y);
 	switch(key)
 	{
-	case 'b': case 'B':
-		glPolygonMode(GL_BACK,GL_FILL);
-	break;
-	case 'f': case 'F':
-		glPolygonMode(GL_FRONT,GL_FILL);
-	break;
-	case 'l': case 'L':
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	break;
 	case 'r': 
 		rotating= !rotating;
 		rotateView(rotating);
 	break;
 	case 'R':
         resetView();
+	break;
+	case 'm': 
+		moving= !moving;
+		moveView(moving);
 	break;
 	case 'z': 
 		if (zoomFactor > 1) zoomFactor = zoomFactor - 1;
@@ -186,14 +228,14 @@ void keyboardCallBack(unsigned char key, int x, int y) {
 //======================================================
 void drawHorns(){
 	glPushMatrix();
-	glTranslatef(5,11.2,-.5);
+	glTranslatef(-0.1,.6,-.6);
 	glRotatef(20, 0, 0, 1);
 	glScalef(.2, 0.2, .2);
 	drawU();
 	glPopMatrix();
 	
 	glPushMatrix();
-	glTranslatef(5,11.2,.5);
+	glTranslatef(-0.1,.6,.6);
 	glRotatef(20, 0, 0, 1);
 	glScalef(.2, 0.2, .2);
 	drawU();
@@ -202,8 +244,8 @@ void drawHorns(){
 
 void drawHead() {
 	glPushMatrix();
-	glTranslatef(5.1,10.5,0);
-	glRotatef(headAngle, 0, 0, 1);
+	//glTranslatef(7.1,0.2,0);
+	glRotatef(-120, 0, 0, 1);
 	glScalef(.7, 0.7, 2);
 	drawS();
 	glPopMatrix();
@@ -272,11 +314,13 @@ void drawLineOfC() {
 	glPopMatrix();
 }
 
-void drawNeck() {
-	glPushMatrix();
-	glTranslatef(3.5, 2.7, 0);
-	glRotatef(neckAngle, 0, 0, 1.0);
+void drawNeckHead() {
 	drawLineOfC();
+	
+	glPushMatrix();
+	glTranslatef(8, 0.2, 0);
+	glRotatef(headAngle, 0, 0, 1);
+	drawHead();
 	glPopMatrix();
 }
 
@@ -298,14 +342,21 @@ void drawBody(){
 	drawM();//draw body
 }
 
+void drawUpperBody(){
+	glPushMatrix();
+	glTranslatef(3, 2, 0);
+	glRotatef(neckAngle, 0, 0, 1);
+	drawNeckHead();
+	glPopMatrix();
+}
+
 void drawGiraffe(){
 	glPushMatrix();
 	glTranslatef(-4, -3, 0);
 	drawBody();
+	drawUpperBody();
 	drawRightLeg();
 	drawLeftLeg();
-	drawNeck();
-	drawHead();
 	glPopMatrix();
 }
 
@@ -319,7 +370,6 @@ void displayCallBack()
 	executeViewControl (yaw, pitch);
 	
 	drawGiraffe();
-
 	glutSwapBuffers();
 }
 
